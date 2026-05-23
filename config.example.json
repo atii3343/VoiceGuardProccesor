@@ -1,0 +1,36 @@
+{
+  "server": {
+    "host": "0.0.0.0",
+    "port": 28472,
+    "server_key": "CHANGE-ME-AT-LEAST-16-CHARS-LONG"
+  },
+  "transcription": {
+    "model": "Systran/faster-whisper-base.en",
+    "language": "en",
+    "device": "cpu",
+    "compute_type": "int8",
+    "cpu_threads": 4,
+    "num_workers": 1,
+    "vad_filter": true,
+    "vad_min_silence_ms": 500,
+    "min_audio_seconds": 0.4,
+    "min_confidence": -1.0,
+    "no_speech_threshold": 0.6,
+    "hallucination_blacklist": [
+      "thanks for watching",
+      "thank you for watching",
+      "subscribe",
+      "please subscribe",
+      "thanks for listening",
+      ".",
+      "you",
+      "bye",
+      "[music]",
+      "[silence]"
+    ]
+  },
+  "moderation": {
+    "case_sensitive": false,
+    "whole_word": true
+  }
+}

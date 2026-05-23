@@ -1,0 +1,15 @@
+# VoiceGuard Processor dependencies
+# Tested with Python 3.11
+
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+websockets==14.1
+
+# faster-whisper + transitive
+faster-whisper==1.1.0
+numpy>=1.26,<2.2
+ctranslate2>=4.4
+
+# PyTorch CPU - faster-whisper uses CTranslate2 by default but VAD needs torch
+# Install CPU-only via index in start script (not here, to keep this clean)
+torch>=2.1,<2.6

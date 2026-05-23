@@ -1,0 +1,41 @@
+{
+    "_comment": "VoiceGuard Processor - Pterodactyl Egg. Import in Panel > Nests > Import Egg.",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-05-23T00:00:00+00:00",
+    "name": "VoiceGuard Processor",
+    "author": "ati@palecrystal.eu",
+    "description": "Python FastAPI + WebSocket processor for VoiceGuard Minecraft voice moderation. Uses faster-whisper for STT.",
+    "features": null,
+    "docker_images": {
+        "Python 3.11 (yolks)": "ghcr.io/parkervcp/yolks:python_3.11"
+    },
+    "file_denylist": [],
+    "startup": "if [ -d venv ]; then . venv/bin/activate; fi; python -m app.main",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Application startup complete\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\nset -e\napt-get update -qq\napt-get install -y --no-install-recommends git curl ffmpeg ca-certificates >/dev/null\n\ncd /mnt/server\n\n# Pull source from your repo (set REPO_URL var in egg vars)\nif [ -d /tmp/vgsrc ]; then rm -rf /tmp/vgsrc; fi\ngit clone --depth 1 \"${REPO_URL}\" /tmp/vgsrc\n\n# Copy only what we need\nrm -rf app\ncp -r /tmp/vgsrc/app ./\ncp /tmp/vgsrc/requirements.txt ./\n[ ! -f config.example.json ] && cp /tmp/vgsrc/config.example.json ./ || true\nrm -rf /tmp/vgsrc\n\n# Default config if missing\nif [ ! -f config.json ]; then\n  cp config.example.json config.json\n  echo \"[install] Created default config.json - edit it before starting!\"\nfi\n\n# Python venv + deps\npython3 -m venv venv\n. venv/bin/activate\npip install --upgrade pip wheel\npip install --index-url https://download.pytorch.org/whl/cpu torch\npip install -r requirements.txt\n\nmkdir -p models tmp logs\necho \"[install] Done.\"\n",
+            "container": "ghcr.io/parkervcp/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Repository URL",
+            "description": "Git URL to clone the processor source from on install/restart.",
+            "env_variable": "REPO_URL",
+            "default_value": "https://github.com/YOURUSER/voiceguard-processor.git",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:255"
+        }
+    ]
+}
