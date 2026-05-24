@@ -13,3 +13,5 @@ ctranslate2>=4.4
 # PyTorch CPU - faster-whisper uses CTranslate2 by default but VAD needs torch
 # Install CPU-only via index in start script (not here, to keep this clean)
 torch>=2.1,<2.6
+
+requests>=2.31
